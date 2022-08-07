@@ -1,5 +1,5 @@
 from rest_framework.serializers import HyperlinkedModelSerializer
-from todoapp.models import UserModel
+from usersapp.models import UserModel
 
 class AuthorModelSerializer(HyperlinkedModelSerializer):
     class Meta:

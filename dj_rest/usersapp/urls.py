@@ -1,9 +1,9 @@
 from django.views.generic import RedirectView
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from todoapp.views import AuthorModelViewSet
+from .views import AuthorModelViewSet
 
-app_name = 'todoapp'
+app_name = 'userapp'
 
 router = DefaultRouter()
 router.register('users', AuthorModelViewSet)
