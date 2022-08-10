@@ -1,7 +1,16 @@
-from rest_framework.serializers import HyperlinkedModelSerializer
-from todoapp.models import UserModel
+from rest_framework.serializers import ModelSerializer
+from todoapp.models import Project, TODO
 
-class AuthorModelSerializer(HyperlinkedModelSerializer):
+class ProjectModelSerializer(ModelSerializer):
+
     class Meta:
-        model = UserModel
-        fields = ['username', 'first_name', 'last_name', 'email' ]
+        model = Project
+        fields = '__all__'
+
+
+class TODOModelSerializer(ModelSerializer):
+
+    class Meta:
+        model = TODO
+        fields = '__all__'
+

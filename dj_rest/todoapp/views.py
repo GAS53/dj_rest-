@@ -1,7 +1,13 @@
 from rest_framework.viewsets import ModelViewSet
-from todoapp.models import UserModel
-from todoapp.serializers import AuthorModelSerializer
+from todoapp.models import Project, TODO
+from todoapp.serializers import ProjectModelSerializer, TODOModelSerializer
 
-class AuthorModelViewSet(ModelViewSet):
-    queryset = UserModel.objects.all()
-    serializer_class = AuthorModelSerializer
+
+class ProjectrModelViewSet(ModelViewSet):
+    queryset = Project.objects.all()
+    serializer_class = ProjectModelSerializer
+
+
+class TODOModelViewSet(ModelViewSet):
+    queryset = TODO.objects.all()
+    serializer_class = TODOModelSerializer

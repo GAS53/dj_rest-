@@ -1,6 +1,6 @@
 from django.core.management import BaseCommand, call_command
 from russian_names import RussianNames
-from todoapp.models import UserModel
+from usersapp.models import UserModel
 
 class Command(BaseCommand):
 

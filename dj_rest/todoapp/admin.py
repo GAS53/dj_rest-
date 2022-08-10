@@ -1,9 +1,15 @@
- 
 from django.contrib import admin
-# from todo.models import User_models
+from todoapp.models import TODO, Project
 
 
-# @admin.register(User_models.User)
-# class UserAdmin(admin.ModelAdmin):
-#     list_display = ['username', 'first_name', 'last_name', 'email']
-#     ordering = ['username']
+@admin.register(TODO)
+class TODOAdmin(admin.ModelAdmin):
+    list_display = ['project', 'user', 'created', 'is_activ']
+    ordering = ['project']
+
+@admin.register(Project)
+class ProjectAdmin(admin.ModelAdmin):
+    list_display = ['name', 'link']
+    ordering = ['name']
+
+
