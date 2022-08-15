@@ -1,8 +1,8 @@
 from django.contrib import admin
-# from todo.models import User_models
+from usersapp.models import UserModel
 
 
-# @admin.register(User_models.User)
-# class UserAdmin(admin.ModelAdmin):
-#     list_display = ['username', 'first_name', 'last_name', 'email']
-#     ordering = ['username']
+@admin.register(UserModel)
+class UserAdmin(admin.ModelAdmin):
+    list_display = ['username', 'first_name', 'last_name', 'email']
+    ordering = ['username']
