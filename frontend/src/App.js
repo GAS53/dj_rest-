@@ -76,7 +76,6 @@ class App extends React.Component {
     // console.log(`todo in render  ${this.state.todo}`)
     return (
       <div>
-
         <BrowserRouter>
           <nav>
             <ul>
@@ -87,37 +86,24 @@ class App extends React.Component {
           </nav>
           <Routes>
 
-
-            <Route>
-              <Route path='/users' element={<UserList users={this.state.users} />} />
-              {/* <Route path=':id' element={<User id={GetUserId()} />} /> */}
+            <Route path='/users' element={<UserList users={this.state.users} />} >
+              <Route index element={<p>Выберите из списка</p>} />
+              <Route path=':userId' element={<UserList users={this.state.users} />} />
             </Route>
 
-            <Route>
-              <Route path='/todo' element={<TodoList todo={this.state.todo} />} />
+            <Route path='/todo' element={<TodoList todo={this.state.todo} />} />
 
-            </Route>
+            <Route path='/projects' element={<ProjectList projects={this.state.projects} />} >
+              <Route path=':projectId' element={<ProjectList projects={this.state.projects} />} />
+            </Route> */
 
-            <Route>
-              <Route path='/projects/userId' element={<ProjectList projects={this.state.projects} />} />
-              <Route path='/projects' element={<ProjectList projects={this.state.projects} />} />
+            <Route path="*" element={<main style={{ padding: "1rem" }}><p>Такой страници не существует</p></main>} />
 
-            </Route>
-
-            {/* <Route>
-              <Route path='projects' element={<Check_project projects={this.state.projects} />} />
-
-             
-            </Route> */}
 
             <Route path='/' element={<MainPage />} />
           </Routes>
-
-
-
-
-
         </BrowserRouter>
+
 
       </div >
     )
