@@ -23,15 +23,20 @@ function ProjectRow(local) {
 
 
 export function ProjectList(projects) {
-    var { userId } = useParams()
-    console.log(`userId is ${userId}`)
-    if (!isNaN(userId)) {
-        userId = userId.replace(':', '')
-        console.log(`userId definde ${userId}`)
-        var res = projects.projects.filter((t) => { projects.projects.id = userId })
+    var { projectId } = useParams()
+    console.log(`projectId is ${projectId}`)
+    var res = projects.projects
+    if (!isNaN(projectId)) {
+
+        projectId = Number(projectId)
+        console.log(`projectId definde ${projectId} it is ${typeof (projectId)}`)
+        console.log(res)
+
+        res = res.filter(item => item.id == projectId)
+        console.log(res)
     } else {
-        console.log('userId UNdefined ')
-        var res = projects.projects
+        console.log('projectId UNdefined ')
+
     }
     console.log(`res ${res}`)
     return (
