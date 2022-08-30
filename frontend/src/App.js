@@ -8,6 +8,7 @@ import UserList from './components/User.js'
 import { ProjectList } from './components/Project';
 import TodoList from './components/Todo';
 import MainPage from './components/Main_page';
+import LoginForm from './components/Login';
 
 
 
@@ -75,9 +76,12 @@ class App extends React.Component {
               <li> <Link to='/projects'>Проекты</Link> </li>
               <li> <Link to='/todo'>ToDo</Link> </li>
               <li> <Link to='/users'>Пользователи</Link> </li>
+              <li> {this.is_authenticated() ? <button onClick={() => this.logout()}>Logout</button> :
+                <Link to='/login'>Login</Link>} </li>
             </ul>
           </nav>
           <Routes>
+            <Route path='/login' element={<LoginForm />} />
 
             <Route path='/users' element={<UserList users={this.state.users} />} >
               <Route index element={<p>Выберите из списка</p>} />
