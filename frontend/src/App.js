@@ -33,7 +33,7 @@ class App extends React.Component {
   componentDidMount() {
     axios.get('http://127.0.0.1:8000/api/users')
       .then(response => {
-        const users = response.data["results"]
+        const users = response.data
         // console.log(`users ${users}`)
         this.setState(
           {
@@ -47,10 +47,10 @@ class App extends React.Component {
     axios.get('http://127.0.0.1:8000/api/todo')
       .then(response => {
         const todo = response.data
-        // console.log(todo)
+        console.log(todo)
         this.setState(
           {
-            'todo': todo["results"],
+            'todo': todo,
           }
 
         )
@@ -63,7 +63,7 @@ class App extends React.Component {
 
         this.setState(
           {
-            'projects': project["results"],
+            'projects': project,
           }
 
         )
