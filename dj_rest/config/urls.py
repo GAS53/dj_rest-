@@ -8,6 +8,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('todoapp.urls', namespace='todoapp')),
     path("", RedirectView.as_view(url="api/")),
+    path('api-auth2/', include('rest_framework.urls')), # удалить
     path('api-auth/',  views.obtain_auth_token),
     
 ]

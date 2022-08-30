@@ -32,7 +32,7 @@ export function ProjectList(projects) {
         console.log(`projectId definde ${projectId} it is ${typeof (projectId)}`)
         console.log(res)
 
-        res = res.filter(item => item.id == projectId)
+        res = res.filter(item => item.id === projectId)
         console.log(res)
     } else {
         console.log('projectId UNdefined ')

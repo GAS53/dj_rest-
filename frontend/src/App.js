@@ -1,21 +1,14 @@
 import React from 'react';
 import './App.css';
 import axios from 'axios'
-import { BrowserRouter, Route, Routes, useParams, Link } from 'react-router-dom'
+import { BrowserRouter, Route, Routes, Link } from 'react-router-dom'
 
 
 import UserList from './components/User.js'
-import { ProjectList, OneProject } from './components/Project';
+import { ProjectList } from './components/Project';
 import TodoList from './components/Todo';
 import MainPage from './components/Main_page';
 
-
-function GetUserId() {
-  let Sdfg = useParams()
-  console.log(`s ${Sdfg}`)
-  Sdfg = parseInt(Sdfg)
-  return Sdfg
-}
 
 
 
