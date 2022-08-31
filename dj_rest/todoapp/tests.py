@@ -6,14 +6,16 @@ from rest_framework import status
 from rest_framework.test import APIRequestFactory, force_authenticate, APIClient, APITestCase
 from mixer.backend.django import mixer
 
-from views import ProjectrModelViewSet
+from .views import ProjectrModelViewSet
 from usersapp.models import UserModel
 from todoapp.models import TODO, Project
 
 class TodoTestCase(TestCase):
 
     def setUp(self):
-        self.user = mixer.blend('usersapp.UserModel', groups__name='admin')
+        self.unm = 'test_user'
+        self.pswd = 'test_password'
+        self.user = mixer.blend('usersapp.UserModel', username=self.unm, groups__name='admin')
         self.user.set_password('password')
         self.user.save()
         self.project = mixer.blend('todoapp.Project', groups=mixer.select)
@@ -43,8 +45,13 @@ class TodoTestCase(TestCase):
         # is_activ = models.BooleanFie
 
     def test_get_list(self):
+        
         factory = APIRequestFactory()
         request = factory.get('/api/project/')
         view = ProjectrModelViewSet.as_view({'get': 'list'})
         response = view(request)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        # self.client.login(username=self.unm, password=self.pswd)
+        admin = UserModel.objects.create_superuser('admin', 'admin@admin.com','admin123456')
+        force_authenticate(request, admin)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
