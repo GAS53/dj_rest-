@@ -22,7 +22,7 @@ function ProjectRow(local) {
 }
 
 
-export function ProjectList(projects) {
+function ProjectList(projects) {
     var { projectId } = useParams()
     console.log(`projectId is ${projectId}`)
     var res = projects.projects
@@ -56,9 +56,6 @@ export function ProjectList(projects) {
 
 }
 
-
-
-
-
+export default ProjectList
 
 

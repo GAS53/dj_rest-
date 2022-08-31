@@ -1,90 +1,143 @@
 import React from 'react';
 import './App.css';
 import axios from 'axios'
-import { BrowserRouter, Route, Routes, useParams, Link } from 'react-router-dom'
+import { BrowserRouter, Route, Routes, Link } from 'react-router-dom'
 
 
 import UserList from './components/User.js'
-import { ProjectList, OneProject } from './components/Project';
+import ProjectList from './components/Project';
 import TodoList from './components/Todo';
 import MainPage from './components/Main_page';
+import LoginForm from './components/Login';
+import Cookies from 'universal-cookie';
 
-
-function GetUserId() {
-  let Sdfg = useParams()
-  console.log(`s ${Sdfg}`)
-  Sdfg = parseInt(Sdfg)
-  return Sdfg
-}
 
 
 
 class App extends React.Component {
-  constructor(props) {
-    super(props)
+  constructor() {
+    super()
     this.state = {
       'users': [],
       'todo': [],
       'project': [],
+      'access_token': '',
+      'refresh_token': '',
+      'user_now': '',
 
     }
   }
 
+  get_token(username, password) {
+    console.log('get_token')
+    axios.post('http://127.0.0.1:8000/api/token/', { username: username, password: password })
+      .then(response => {
+        this.setState({ user_now: username })
+        const access_token = response.data['access']
+        const refresh_token = response.data['refresh']
+        // console.log(`it is - ${response.data['token']}`)
+
+
+        console.log(`access_token ${access_token}`)
+        console.log(`refresh_token ${refresh_token}`)
+
+        this.set_token(access_token, refresh_token)
+
+        this.setState({ 'access_token': access_token })
+        this.setState({ 'refresh_token': refresh_token })
+      }).catch(error => alert('неверный логин или пароль'))
+  }
+
+  set_token(access_token = '', refresh_token = '') {
+
+    const cookies = new Cookies();
+    cookies.set('access', access_token);
+    cookies.set('refresh', refresh_token);
+
+    console.log(`set token ${refresh_token}`)
+    this.setState({ refresh_token, access_token }, () => this.load_data())
+
+  }
+
+  get_is_access(check = true) {
+    let headers = {
+      'Content-Type': 'application/json',
+
+    }
+    // let headers = { "alg": "HS256", "typ": "JWT" }
+    if (this.is_authenticated()) {
+      if (check) {
+        headers['Authorization'] = `Bearer ${this.state.access_token}`
+      } else {
+        headers['Authorization'] = `Bearer ${this.state.refresh_token}`
+      }
+    }
+
+    return headers
+  }
+
+
+
+  load_data() {
+    console.log(`access_token -  ${this.state.access_token} \n refresh_token -  ${this.state.refresh_token}`)
+    const headers = this.get_is_access()
+    console.log(headers)
+    axios.get('http://127.0.0.1:8000/api/todo/', { headers })
+      .then(response => this.setState({ 'todo': response.data })).catch(error => console.log(error))
+    axios.get('http://127.0.0.1:8000/api/project/', { headers })
+      .then(response => this.setState({ 'projects': response.data })).catch(error => console.log(error))
+    axios.get('http://127.0.0.1:8000/api/users/', { headers })
+      .then(response => this.setState({ 'users': response.data })).catch(error => console.log(error))
+
+  }
+
+  get_token_from_storage() {
+    console.log('get_token_from_storage')
+    const cookies = new Cookies();
+    const access_token = cookies.get('access_token')
+    const refresh_token = cookies.get('refresh_token')
+    if (access_token) {
+      this.setState({ access_token, refresh_token }, () => this.load_data())
+    }
+    console.log(`state - ${this.state.access_token}`)
+  }
+
+  logout() {
+    console.log('logout')
+    this.set_token()
+  }
+
+  is_authenticated() {
+    return this.state.access_token !== ''
+  }
+
+
+
+
   componentDidMount() {
-    axios.get('http://127.0.0.1:8000/api/users')
-      .then(response => {
-        const users = response.data["results"]
-        // console.log(`users ${users}`)
-        this.setState(
-          {
-            'users': users,
-          }
-
-        )
-      }).catch(error => console.log(error))
-
-
-    axios.get('http://127.0.0.1:8000/api/todo')
-      .then(response => {
-        const todo = response.data
-        // console.log(todo)
-        this.setState(
-          {
-            'todo': todo["results"],
-          }
-
-        )
-      }).catch(error => console.log(error))
-
-
-    axios.get('http://127.0.0.1:8000/api/project')
-      .then(response => {
-        const project = response.data
-
-        this.setState(
-          {
-            'projects': project["results"],
-          }
-
-        )
-        console.log(this.state.projects)
-      }).catch(error => console.log(error))
+    console.log('componentDidMount')
+    this.get_token_from_storage()
 
   }
 
   render() {
-    // console.log(`todo in render  ${this.state.todo}`)
+
+    console.log(`todo in render  ${this.state.todo}`)
     return (
       <div>
+        {this.state.user_now === '' ? <p>Вы не вошли</p> : <p>Вы вошли как {this.state.user_now}</p>}
         <BrowserRouter>
           <nav>
             <ul>
               <li> <Link to='/projects'>Проекты</Link> </li>
               <li> <Link to='/todo'>ToDo</Link> </li>
               <li> <Link to='/users'>Пользователи</Link> </li>
+              <li> {this.is_authenticated() ? <button onClick={() => this.logout()}>Выйти</button> :
+                <Link to='/login'>Войти</Link>} </li>
             </ul>
           </nav>
           <Routes>
+            <Route path='/login' element={<LoginForm get_token={(username, password) => this.get_token(username, password)} />} />
 
             <Route path='/users' element={<UserList users={this.state.users} />} >
               <Route index element={<p>Выберите из списка</p>} />
@@ -109,6 +162,8 @@ class App extends React.Component {
     )
   }
 }
+
+
 
 
 

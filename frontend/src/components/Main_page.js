@@ -1,6 +1,7 @@
 import React from "react";
 
-function MainPage() {
+function MainPage(prop) {
+    console.log(prop)
     return (
         <h1>Основная страница</h1>
     )

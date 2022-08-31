@@ -29,7 +29,7 @@ INSTALLED_APPS = [
     'todoapp',
     'rest_framework',
     'corsheaders',
-    'rest_framework.authtoken',
+    # 'rest_framework.authte.o.ken',
     'rest_framework_simplejwt',
 ]
 
@@ -126,7 +126,7 @@ AUTH_USER_MODEL = 'usersapp.UserModel'
 
 
 REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': ['rest_framework.permissions.IsAuthenticated',],
+    # 'DEFAULT_PERMISSION_CLASSES': ['rest_framework.permissions.IsAuthenticated',],
 
     'DEFAULT_AUTHENTICATION_CLASSES': [
             # 'rest_framework.authentication.BasicAuthentication',   

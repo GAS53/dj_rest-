@@ -19,7 +19,7 @@ function TodoItem(todo) {
                 {todo.todo.user}
             </td>
             <td>
-                {todo.todo.is_activ}
+                {(todo.todo.is_activ) ? 'Активно' : 'Не активно'}
             </td>
 
         </tr>
