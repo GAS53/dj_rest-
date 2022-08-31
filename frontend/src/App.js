@@ -21,7 +21,8 @@ class App extends React.Component {
       'users': [],
       'todo': [],
       'project': [],
-      'token': '',
+      'access_token': '',
+      'refresh_token': '',
 
     }
   }
@@ -31,30 +32,55 @@ class App extends React.Component {
     axios.post('http://127.0.0.1:8000/api/token/', { username: username, password: password })
       .then(response => {
 
-        const token = response.data.token
-        console.log(`token ${token}`)
+        const access_token = response.data['access']
+        const refresh_token = response.data['refresh']
+        console.log(`tokenzzzz ${access_token}`)
 
-        this.set_token(response.data['token'])
+        this.set_token(access_token, refresh_token)
 
-        this.setState({ 'token': token })
+        this.setState({ 'access_token': access_token })
+        this.setState({ 'refresh_token': refresh_token })
       }).catch(error => alert('неверный логин или пароль'))
   }
 
-  set_token(token) {
+  set_token(access_token = '', refresh_token = '') {
+
     const cookies = new Cookies();
-    cookies.set('token', token);
-    this.setState({ 'token': token }, () => this.load_data())
+    cookies.set('access_token', access_token);
+    cookies.set('refresh_token', refresh_token);
+
+    console.log(`set token ${refresh_token}`)
+    this.setState({ refresh_token, access_token }, () => this.load_data())
 
   }
 
+  get_is_access(check = true) {
+    // let headers = {
+    //   'Content-Type': 'application/json'
+    // }
+    let headers = { "alg": "HS256", "typ": "JWT" }
+    if (this.is_authenticated()) {
+      if (check) {
+        headers['Authorization'] = `Bearer ${this.state.access_token}`
+      } else {
+        headers['Authorization'] = `Bearer ${this.state.refresh_token}`
+      }
+    }
+
+    return headers
+  }
+
+
+
   load_data() {
-    console.log('load data')
-    const headers = this.get_headers()
-    axios.get('http://127.0.0.1:8000/api/todo/', { headers })
+    console.log(`load data token -  ${this.state.access_token}`)
+    const headers = this.get_is_access(true)
+    console.log(headers)
+    axios.get('http://127.0.0.1:8000/api/todo/', { headers }, { withCredentials: true })
       .then(response => this.setState({ 'todo': response.data })).catch(error => console.log(error))
-    axios.get('http://127.0.0.1:8000/api/project/', { headers })
+    axios.get('http://127.0.0.1:8000/api/project/', { headers }, { withCredentials: true })
       .then(response => this.setState({ 'project': response.data })).catch(error => console.log(error))
-    axios.get('http://127.0.0.1:8000/api/users/', { headers })
+    axios.get('http://127.0.0.1:8000/api/users/', { headers }, { withCredentials: true })
       .then(response => this.setState({ 'users': response.data })).catch(error => console.log(error))
 
   }
@@ -62,31 +88,24 @@ class App extends React.Component {
   get_token_from_storage() {
     console.log('get_token_from_storage')
     const cookies = new Cookies();
-    const token = cookies.get('token')
-    if (token) {
-      this.setState({ 'token': token }, () => this.load_data())
+    const access_token = cookies.get('access_token')
+    const refresh_token = cookies.get('refresh_token')
+    if (access_token) {
+      this.setState({ access_token, refresh_token }, () => this.load_data())
     }
-    console.log(`state - ${token}`)
+    console.log(`state - ${this.state.access_token}`)
   }
 
   logout() {
     console.log('logout')
-    this.set_token('')
+    this.set_token()
   }
 
   is_authenticated() {
-    return this.state.token != ''
+    return this.state.access_token != ''
   }
 
-  get_headers() {
-    let headers = {
-      'Content-Type': 'application/json'
-    }
-    if (this.is_authenticated()) {
-      headers['Authorization'] = 'Token ' + this.state.token
-    }
-    return headers
-  }
+
 
 
   componentDidMount() {
@@ -127,7 +146,7 @@ class App extends React.Component {
             <Route path="*" element={<main style={{ padding: "1rem" }}><p>Такой страници не существует</p></main>} />
 
 
-            <Route path='/' element={<MainPage now_page_name />} />
+            <Route path='/' element={<MainPage />} />
           </Routes>
         </BrowserRouter>
 
@@ -136,6 +155,7 @@ class App extends React.Component {
     )
   }
 }
+
 
 
 
