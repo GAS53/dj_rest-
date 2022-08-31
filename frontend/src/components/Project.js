@@ -24,22 +24,21 @@ function ProjectRow(local) {
 
 function ProjectList(projects) {
     var { projectId } = useParams()
-    var filterProject = projects.project.filter((proj) => proj.id.includes(parseInt(projectId)))
-    // console.log(`projectId is ${projectId}`)
-    // var res = projects.projects
-    // if (!isNaN(projectId)) {
+    console.log(`projectId is ${projectId}`)
+    var res = projects.projects
+    if (!isNaN(projectId)) {
 
-    //     projectId = Number(projectId)
-    //     console.log(`projectId definde ${projectId} it is ${typeof (projectId)}`)
-    //     console.log(res)
+        projectId = Number(projectId)
+        console.log(`projectId definde ${projectId} it is ${typeof (projectId)}`)
+        console.log(res)
 
-    //     res = res.filter(item => item.id === projectId)
-    //     console.log(res)
-    // } else {
-    //     console.log('projectId UNdefined ')
+        res = res.filter(item => item.id == projectId)
+        console.log(res)
+    } else {
+        console.log('projectId UNdefined ')
 
-    // }
-    // console.log(`res ${res}`)
+    }
+    console.log(`res ${res}`)
     return (
         <table>
             <th>
@@ -51,51 +50,12 @@ function ProjectList(projects) {
             <th>
                 Пользователь
             </th>
-            {filterProject.map((t) => <ProjectRow external={t} />)}
+            {res.map((t) => <ProjectRow external={t} />)}
         </table>
     )
 
 }
 
-
-
-
-
-
 export default ProjectList
 
 
-// function ProjectList(projects) {
-//     var { projectId } = useParams()
-//     var
-//         console.log(`projectId is ${projectId}`)
-//     var res = projects.projects
-//     if (!isNaN(projectId)) {
-
-//         projectId = Number(projectId)
-//         console.log(`projectId definde ${projectId} it is ${typeof (projectId)}`)
-//         console.log(res)
-
-//         res = res.filter(item => item.id === projectId)
-//         console.log(res)
-//     } else {
-//         console.log('projectId UNdefined ')
-
-//     }
-//     console.log(`res ${res}`)
-//     return (
-//         <table>
-//             <th>
-//                 Название проекта
-//             </th>
-//             <th>
-//                 Ссылка
-//             </th>
-//             <th>
-//                 Пользователь
-//             </th>
-//             {res.map((t) => <ProjectRow external={t} />)}
-//         </table>
-//     )
-
-// }

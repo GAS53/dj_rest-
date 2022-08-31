@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 import axios from 'axios'
-import { BrowserRouter, Route, Routes, Link, useLocation } from 'react-router-dom'
+import { BrowserRouter, Route, Routes, Link } from 'react-router-dom'
 
 
 import UserList from './components/User.js'
@@ -23,6 +23,7 @@ class App extends React.Component {
       'project': [],
       'access_token': '',
       'refresh_token': '',
+      'user_now': '',
 
     }
   }
@@ -31,7 +32,7 @@ class App extends React.Component {
     console.log('get_token')
     axios.post('http://127.0.0.1:8000/api/token/', { username: username, password: password })
       .then(response => {
-
+        this.setState({ user_now: username })
         const access_token = response.data['access']
         const refresh_token = response.data['refresh']
         // console.log(`it is - ${response.data['token']}`)
@@ -50,8 +51,8 @@ class App extends React.Component {
   set_token(access_token = '', refresh_token = '') {
 
     const cookies = new Cookies();
-    cookies.set('access_token', access_token);
-    cookies.set('refresh_token', refresh_token);
+    cookies.set('access', access_token);
+    cookies.set('refresh', refresh_token);
 
     console.log(`set token ${refresh_token}`)
     this.setState({ refresh_token, access_token }, () => this.load_data())
@@ -66,9 +67,9 @@ class App extends React.Component {
     // let headers = { "alg": "HS256", "typ": "JWT" }
     if (this.is_authenticated()) {
       if (check) {
-        headers['Authorization'] = `Token ${this.state.access_token}`
+        headers['Authorization'] = `Bearer ${this.state.access_token}`
       } else {
-        headers['Authorization'] = `Token ${this.state.refresh_token}`
+        headers['Authorization'] = `Bearer ${this.state.refresh_token}`
       }
     }
 
@@ -79,12 +80,12 @@ class App extends React.Component {
 
   load_data() {
     console.log(`access_token -  ${this.state.access_token} \n refresh_token -  ${this.state.refresh_token}`)
-    const headers = this.get_is_access(false)
+    const headers = this.get_is_access()
     console.log(headers)
     axios.get('http://127.0.0.1:8000/api/todo/', { headers })
       .then(response => this.setState({ 'todo': response.data })).catch(error => console.log(error))
     axios.get('http://127.0.0.1:8000/api/project/', { headers })
-      .then(response => this.setState({ 'project': response.data })).catch(error => console.log(error))
+      .then(response => this.setState({ 'projects': response.data })).catch(error => console.log(error))
     axios.get('http://127.0.0.1:8000/api/users/', { headers })
       .then(response => this.setState({ 'users': response.data })).catch(error => console.log(error))
 
@@ -124,6 +125,7 @@ class App extends React.Component {
     console.log(`todo in render  ${this.state.todo}`)
     return (
       <div>
+        {this.state.user_now === '' ? <p>Вы не вошли</p> : <p>Вы вошли как {this.state.user_now}</p>}
         <BrowserRouter>
           <nav>
             <ul>
