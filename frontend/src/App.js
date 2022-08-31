@@ -34,7 +34,11 @@ class App extends React.Component {
 
         const access_token = response.data['access']
         const refresh_token = response.data['refresh']
-        console.log(`tokenzzzz ${access_token}`)
+        // console.log(`it is - ${response.data['token']}`)
+
+
+        console.log(`access_token ${access_token}`)
+        console.log(`refresh_token ${refresh_token}`)
 
         this.set_token(access_token, refresh_token)
 
@@ -55,15 +59,16 @@ class App extends React.Component {
   }
 
   get_is_access(check = true) {
-    // let headers = {
-    //   'Content-Type': 'application/json'
-    // }
-    let headers = { "alg": "HS256", "typ": "JWT" }
+    let headers = {
+      'Content-Type': 'application/json',
+
+    }
+    // let headers = { "alg": "HS256", "typ": "JWT" }
     if (this.is_authenticated()) {
       if (check) {
-        headers['Authorization'] = `Bearer ${this.state.access_token}`
+        headers['Authorization'] = `Token ${this.state.access_token}`
       } else {
-        headers['Authorization'] = `Bearer ${this.state.refresh_token}`
+        headers['Authorization'] = `Token ${this.state.refresh_token}`
       }
     }
 
@@ -73,14 +78,14 @@ class App extends React.Component {
 
 
   load_data() {
-    console.log(`load data token -  ${this.state.access_token}`)
-    const headers = this.get_is_access(true)
+    console.log(`access_token -  ${this.state.access_token} \n refresh_token -  ${this.state.refresh_token}`)
+    const headers = this.get_is_access(false)
     console.log(headers)
-    axios.get('http://127.0.0.1:8000/api/todo/', { headers }, { withCredentials: true })
+    axios.get('http://127.0.0.1:8000/api/todo/', { headers })
       .then(response => this.setState({ 'todo': response.data })).catch(error => console.log(error))
-    axios.get('http://127.0.0.1:8000/api/project/', { headers }, { withCredentials: true })
+    axios.get('http://127.0.0.1:8000/api/project/', { headers })
       .then(response => this.setState({ 'project': response.data })).catch(error => console.log(error))
-    axios.get('http://127.0.0.1:8000/api/users/', { headers }, { withCredentials: true })
+    axios.get('http://127.0.0.1:8000/api/users/', { headers })
       .then(response => this.setState({ 'users': response.data })).catch(error => console.log(error))
 
   }
@@ -102,7 +107,7 @@ class App extends React.Component {
   }
 
   is_authenticated() {
-    return this.state.access_token != ''
+    return this.state.access_token !== ''
   }
 
 

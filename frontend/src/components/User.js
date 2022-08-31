@@ -9,10 +9,10 @@ function UserItem(user) {
                 {user.user.username}
             </td>
             <td>
-                {user.user.first_name}
+                {user.user.firstName}
             </td>
             <td>
-                {user.user.last_name}
+                {user.user.lastName}
             </td>
             <td>
                 {user.user.email}
