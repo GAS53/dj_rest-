@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { version } from 'react';
 import './App.css';
 import axios from 'axios'
 import { BrowserRouter, Route, Routes, Link } from 'react-router-dom'
@@ -24,6 +24,7 @@ class App extends React.Component {
       'access_token': '',
       'refresh_token': '',
       'user_now': '',
+      'ver': 'v1',
 
     }
   }
@@ -60,18 +61,26 @@ class App extends React.Component {
   }
 
   get_is_access(check = true) {
-    let headers = {
-      'Content-Type': 'application/json',
+    let headers = {}
+    headers['Content-Type'] = 'application/json'
+    if (this.state.ver == 'v2') {
+      headers['Accept'] = 'application/json; version = 2.0'
+    }
 
-    }
+
+
     // let headers = { "alg": "HS256", "typ": "JWT" }
-    if (this.is_authenticated()) {
-      if (check) {
-        headers['Authorization'] = `Bearer ${this.state.access_token}`
-      } else {
-        headers['Authorization'] = `Bearer ${this.state.refresh_token}`
-      }
+    // if (this.is_authenticated()) {
+
+    //   headers['Accept'] = 'v2'
+    // }
+
+    if (check) {
+      headers['Authorization'] = `Bearer ${this.state.access_token}`
+    } else {
+      headers['Authorization'] = `Bearer ${this.state.refresh_token}`
     }
+
 
     return headers
   }
@@ -125,6 +134,7 @@ class App extends React.Component {
     console.log(`todo in render  ${this.state.todo}`)
     return (
       <div>
+        <p>API весрсии {this.state.ver}</p>
         {this.state.user_now === '' ? <p>Вы не вошли</p> : <p>Вы вошли как {this.state.user_now}</p>}
         <BrowserRouter>
           <nav>

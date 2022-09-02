@@ -29,7 +29,7 @@ INSTALLED_APPS = [
     'todoapp',
     'rest_framework',
     'corsheaders',
-    # 'rest_framework.authte.o.ken',
+    'drf_yasg',
     'rest_framework_simplejwt',
 ]
 
@@ -143,6 +143,7 @@ REST_FRAMEWORK = {
         'djangorestframework_camel_case.render.CamelCaseBrowsableAPIRenderer',
         
     ),
+     'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.AcceptHeaderVersioning',
 
     'DEFAULT_PARSER_CLASSES': (
         # If you use MultiPartFormParser or FormParser, we also have a camel case version
