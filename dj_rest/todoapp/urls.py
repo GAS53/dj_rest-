@@ -6,6 +6,8 @@ from rest_framework_simplejwt.views import (TokenObtainPairView,TokenRefreshView
 from drf_yasg.views import get_schema_view
 from drf_yasg.openapi import Info, License, Contact
 
+
+
 app_name = 'todoapp'
 
 router = DefaultRouter()
@@ -35,4 +37,5 @@ urlpatterns = [
     path('token/verify/', TokenVerifyView.as_view(), name='token_verify'),
     path('', include(router.urls)),
     path('swagger', schema_view.with_ui()),
+    
     ]
