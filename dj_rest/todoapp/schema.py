@@ -1,3 +1,5 @@
+import re
+from typing_extensions import Required
 import graphene
 from graphene_django import DjangoObjectType
 from todoapp.models import TODO, Project
@@ -23,20 +25,46 @@ class UserType(DjangoObjectType):
 class Query(graphene.ObjectType):
     # hello = graphene.String(default_value="Hi!")
     get_todo = graphene.List(TodoType)
+    get_todo_by_id = graphene.Field(TodoType, id=graphene.Int(required=True))
     get_project = graphene.List(ProjectsType)
     get_users = graphene.List(UserType)
+ 
 
-    def resolve_get_todo(root, info):
-        print(TODO.objects.all())
+    def resolve_get_todo(self, info):
         return TODO.objects.all()
 
-    def resolve_get_project(root, info):
+    def resolve_get_todo_by_id(self, info, id):
+        res = TODO.objects.get(id=id)
+        if res:
+            return res
+        return None
+
+
+    def resolve_get_project(self, info):
         return Project.objects.all()
 
-    def resolve_get_users(root, info):
+    def resolve_get_users(self, info):
         return UserModel.objects.all()
 
-schema = graphene.Schema(query=Query)
+class ProjectMutation(graphene.Mutation):
+    class Arguments:
+        name = graphene.String(required=True)
+        link = graphene.String(required=False)
+    
+    project = graphene.Field(ProjectsType)
+
+    @classmethod
+    def mutate(cls, root, info, name, link):
+        project = Project.objects.get(id=id)
+        project.name = name
+        project.link = link
+        project.save()
+        return  ProjectMutation(project=project)
+
+class Mutation(graphene.ObjectType):
+    update_project = ProjectMutation.Field()
+
+schema = graphene.Schema(query=Query, mutation=Mutation)
 
 
 
