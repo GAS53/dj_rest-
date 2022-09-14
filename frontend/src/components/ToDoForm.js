@@ -5,23 +5,26 @@ class ToDoForm extends React.Component {
         console.log(`create in ToDoForm`)
         super(props)
         this.state = {
-            'project': project, 'text': text, 'created': created, 'updated': updated, 'user': user, 'is_activ': is_activ, 'users': []
+            'project': '',
+            'text': '',
+            'created': '',
+            'updated': '',
+            'user': '',
+            'is_activ': '',
         }
 
     }
 
-    handleCange(eve) {
-        this.setState(
-            {
-                [eve.target.name]: eve.target.value
-            }
-        );
+    handleChange(event) {
+        this.setState({
+            [event.target.name]: event.target.value
+        })
     }
 
 
-    handleSubmit(eve) {
+    handleSubmit(event) {
         this.props.createToDo(this.state.project, this.state.text, this.state.created, this.state.updated, this.state.user, this.state.is_activ)
-        eve.preventDefault()
+        event.preventDefault()
 
     }
 
@@ -50,12 +53,14 @@ class ToDoForm extends React.Component {
             <form onSubmit={(eve) => this.handleSubmit(eve)}>
 
 
-                <input type="text" name='Название проекта' placeholder="project" value={this.state.project} onChange={(eve) => this.handleChange(eve)} />
-                <input type="text" name='Описание проекта' placeholder="text" value={this.state.text} onChange={(eve) => this.handleChange(eve)} />
-                <input type="text" name='Дата создания' placeholder="created" value={this.state.created} onChange={(eve) => this.handleChange(eve)} />
-                <input type="text" name='Дата обновления' placeholder="updated" value={this.state.updated} onChange={(eve) => this.handleChange(eve)} />
-                <input type="text" name='Создатель проекта' placeholder="user" value={this.state.user} onChange={(eve) => this.handleChange(eve)} />
-                <input type="text" name='Является ли проект активным' placeholder="is_activ" value={this.state.is_activ} onChange={(eve) => this.handleChange(eve)} />
+                <input type="text" name='project' placeholder="project" value={this.state.project} onChange={(event) => this.handleChange(event)} />
+                <input type="text" name='text' placeholder="text" value={this.state.text} onChange={(event) => this.handleChange(event)} />
+                <input type="text" name='created' placeholder="created" value={this.state.created} onChange={(event) => this.handleChange(event)} />
+                <input type="text" name='updated' placeholder="updated" value={this.state.updated} onChange={(event) => this.handleChange(event)} />
+                <input type="text" name='user' placeholder="user" value={this.state.user} onChange={(event) => this.handleChange(event)} />
+                <input type="text" name='is_activ' placeholder="is_activ" value={this.state.is_activ} onChange={(event) => this.handleChange(event)} />
+
+
 
                 <input type="submit" value="Сохранить" />
             </form >

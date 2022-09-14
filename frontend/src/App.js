@@ -158,10 +158,9 @@ class App extends React.Component {
   }
 
   createProject(name, link, users) {
-    console.log(name, link, users)
+    console.log(`createProject ${name}, ${link}, ${users}`)
     const headers = this.get_is_access()
-    axios
-      .post('http://127.0.0.1:8000/api/projects/', { 'name': name, 'link': link, 'users': users }, { headers })
+    axios.post('http://127.0.0.1:8000/api/project/', { 'name': name, 'link': link, 'users': users }, { headers })
 
       .catch(error => {
         console.log(error)
@@ -181,59 +180,62 @@ class App extends React.Component {
       .catch(error => {
         console.log(error)
       })
-
-
-
-
-    render() {
-
-      console.log(`todo in render  ${this.state.todo}`)
-      return (
-        <div>
-          <p>API весрсии {this.state.ver}</p>
-          {this.state.user_now === '' ? <p>Вы не вошли</p> : <p>Вы вошли как {this.state.user_now}</p>}
-          <BrowserRouter>
-            <nav>
-              <ul>
-                <li> <Link to='/projects'>Проекты</Link> </li>
-                <li> <Link to='/projects/create'>Создать проект</Link> </li>
-                <li> <Link to='/todo'>ToDo</Link></li>
-                <li> <Link to='/users'>Пользователи</Link> </li>
-                <li> {this.is_authenticated() ? <button onClick={() => this.logout()}>Выйти</button> :
-                  <Link to='/login'>Войти</Link>} </li>
-              </ul>
-            </nav>
-            <Routes>
-              <Route path='/login' element={<LoginForm get_token={(username, password) => this.get_token(username, password)} />} />
-
-              <Route path='/users' element={<UserList users={this.state.users} />} >
-                <Route index element={<p>Выберите из списка</p>} />
-                <Route path=':userId' element={<UserList users={this.state.users} />} />
-              </Route>
-где - то здесь не хватает }
-              <Route path='/todo/create' element={<ToDoForm todo={this.state.todo} createToDo={(project, text, created, updated, user, is_activ) => this.createToDo(project, text, created, updated, user, is_activ)} />} />
-              <Route path='/todo' element={<TodoList todo={this.state.todo} del_func={(id) => { this.delete_todo(id) }} />} >
-
-              </Route>
-
-              <Route path='/projects/create' element={<ProjectForm projects={this.state.projects} createProject={(name, link, users) => this.createProject(name, link, users)} />} />
-              <Route path='/projects' element={<ProjectList projects={this.state.projects} del_func={(project_id) => { this.delete(project_id) }} />} >
-
-                <Route path=':projectId' element={<ProjectList projects={this.state.projects} />} />
-              </Route>
-
-              <Route path="*" element={<main style={{ padding: "1rem" }}><p>Такой страници не существует</p></main>} />
-
-
-              <Route path='/' element={<MainPage />} />
-            </Routes>
-          </BrowserRouter>
-
-
-        </div >
-      )
-    }
   }
+
+
+
+
+  render() {
+
+    console.log(`todo in render  ${this.state.todo}`)
+    return (
+      <div>
+        <p>API весрсии {this.state.ver}</p>
+        {this.state.user_now === '' ? <p>Вы не вошли</p> : <p>Вы вошли как {this.state.user_now}</p>}
+        <BrowserRouter>
+          <nav>
+            <ul>
+              <li> <Link to='/projects'>Проекты</Link> </li>
+              <li> <Link to='/projects/create'>Создать проект</Link> </li>
+              <li> <Link to='/todo'>ToDo</Link></li>
+              <li> <Link to='/todo/create'>Создать ToDo</Link></li>
+              <li> <Link to='/users'>Пользователи</Link> </li>
+              <li> {this.is_authenticated() ? <button onClick={() => this.logout()}>Выйти</button> :
+                <Link to='/login'>Войти</Link>} </li>
+            </ul>
+          </nav>
+          <Routes>
+            <Route path='/login' element={<LoginForm get_token={(username, password) => this.get_token(username, password)} />} />
+
+            <Route path='/users' element={<UserList users={this.state.users} />} >
+              <Route index element={<p>Выберите из списка</p>} />
+              <Route path=':userId' element={<UserList users={this.state.users} />} />
+            </Route>
+
+            <Route path='/todo/create' element={<ToDoForm todo={this.state.todo} createToDo={(project, text, created, updated, user, is_activ) => this.createToDo(project, text, created, updated, user, is_activ)} />} />
+            <Route path='/todo' element={<TodoList todo={this.state.todo} del_func={(id) => { this.delete_todo(id) }} />} >
+
+            </Route>
+
+            <Route path='/projects/create' element={<ProjectForm projects={this.state.projects} users={this.state.users} createProject={(name, link, users) => this.createProject(name, link, users)} />} />
+            <Route path='/projects' element={<ProjectList projects={this.state.projects} del_func={(project_id) => { this.delete(project_id) }} />} >
+
+              <Route path=':projectId' element={<ProjectList projects={this.state.projects} />} />
+            </Route>
+
+            <Route path="*" element={<main style={{ padding: "1rem" }}><p>Такой страници не существует</p></main>} />
+
+
+            <Route path='/' element={<MainPage />} />
+          </Routes>
+        </BrowserRouter>
+
+
+      </div >
+    )
+  }
+}
+
 
 
 

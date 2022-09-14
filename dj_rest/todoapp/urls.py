@@ -1,4 +1,5 @@
 from django.urls import path, include
+from django.views.generic import TemplateView
 from rest_framework.routers import DefaultRouter
 from todoapp.views import TODOModelViewSet, ProjectrModelViewSet
 from usersapp.views import UserModelViewSet
@@ -35,7 +36,8 @@ urlpatterns = [
     path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('token/verify/', TokenVerifyView.as_view(), name='token_verify'),
-    path('', include(router.urls)),
+    # path('', include(router.urls)),
     path('swagger', schema_view.with_ui()),
+    path('', TemplateView.as_view(template_name='index.html'))
     
     ]
