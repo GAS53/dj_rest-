@@ -1,44 +1,45 @@
 import React from "react";
-import { useParams, Link } from 'react-router-dom'
 
-function ProjectRow(local) {
-    // console.log(`local ${local.external.id}`)
-    let str_id = `/projects/${local.external.id}`
+
+
+const ProjectRow = ({ project, del_func }) => {
+    console.log(`id ${project.id} func ${del_func}`)
+    console.log(`project ${project.users}`)
     return (
         <tr>
+            <td>{project.id}</td>
+            <td>{project.link}</td>
+            {/* <td>{project.name}</td> */}
             <td>
-                <Link to={str_id}>{local.external.name}</Link>
-            </td>
-            <td>
-                {local.external.link}
-            </td>
-            <td>
-                {local.external.users}
-            </td>
 
-
+                {project.users}
+            </td>
+            <td>
+                <button onClick={() => del_func(project.id)}>Удалить</button>
+            </td>
         </tr>
     )
 }
 
 
-function ProjectList(projects) {
-    var { projectId } = useParams()
-    console.log(`projectId is ${projectId}`)
-    var res = projects.projects
-    if (!isNaN(projectId)) {
+const ProjectList = ({ projects, del_func }) => {
 
-        projectId = Number(projectId)
-        console.log(`projectId definde ${projectId} it is ${typeof (projectId)}`)
-        console.log(res)
+    // var { projectId } = useParams()
+    // console.log(`projectId is ${projectId} del_func ${del_func}`)
+    // var res = projects.projects
+    // if (!isNaN(projectId)) {
 
-        res = res.filter(item => item.id == projectId)
-        console.log(res)
-    } else {
-        console.log('projectId UNdefined ')
+    //     projectId = Number(projectId)
+    //     console.log(`projectId definde ${projectId} it is ${typeof (projectId)}`)
+    //     console.log(res)
 
-    }
-    console.log(`res ${res}`)
+    //     res = res.filter(item => item.id === projectId)
+    //     console.log(res)
+    // } else {
+    //     console.log('projectId UNdefined ')
+
+    // }
+    // console.log(`res ${res}`)
     return (
         <table>
             <th>
@@ -50,7 +51,10 @@ function ProjectList(projects) {
             <th>
                 Пользователь
             </th>
-            {res.map((t) => <ProjectRow external={t} />)}
+            <th>
+                Удалить
+            </th>
+            {projects.map((project) => <ProjectRow project={project} del_func={del_func} />)}
         </table>
     )
 

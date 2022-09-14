@@ -1,25 +1,28 @@
 import React from "react";
 
-function TodoItem(todo) {
+const TodoItem = ({ todo, del_func }) => {
     return (
         <tr>
             <td>
-                {todo.todo.project}
+                {todo.project}
             </td>
             <td>
-                {todo.todo.text}
+                {todo.text}
             </td>
             <td>
-                {todo.todo.created}
+                {todo.created}
             </td>
             <td>
-                {todo.todo.updated}
+                {todo.updated}
             </td>
             <td>
-                {todo.todo.user}
+                {todo.user}
             </td>
             <td>
-                {(todo.todo.is_activ) ? 'Активно' : 'Не активно'}
+                {(todo.is_activ) ? 'Активно' : 'Не активно'}
+            </td>
+            <td>
+                <button onClic={() => del_func(todo.id)}>Удалить</button>
             </td>
 
         </tr>
@@ -27,7 +30,7 @@ function TodoItem(todo) {
 }
 
 
-function TodoList(todoin) {
+const TodoList = ({ todo, del_func }) => {
     return (
         <table>
             <th>
@@ -48,7 +51,10 @@ function TodoList(todoin) {
             <th>
                 Задание активно
             </th>
-            {todoin.todo.map((t) => <TodoItem todo={t} />)}
+            <th>
+                Удалить
+            </th>
+            {todo.map((todo) => <TodoItem todo={todo} del_func={del_func} />)}
 
 
 

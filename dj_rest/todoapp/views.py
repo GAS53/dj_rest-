@@ -10,7 +10,7 @@ class ProjectrModelViewSet(ModelViewSet, LimitOffsetPagination, APIView):
     queryset = Project.objects.all()
     serializer_class = ProjectModelSerializer
     default_limit = 10
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
 
 
     def get_queryset(self):
@@ -26,7 +26,7 @@ class TODOModelViewSet(ModelViewSet, LimitOffsetPagination, APIView):
     serializer_class = TODOModelSerializer
     default_limit = 20
     filterset_fields = ['project', 'created']
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
 
     def perform_destroy(self, instance):
         instance.is_activ = False
